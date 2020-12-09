@@ -5,11 +5,12 @@
 #include <vector>
 #include <sstream>
 
-int to_dec(std::string& line) {
-    for (char& i : line)
-        i = (i == 'F' || i == 'L') ? '0' : '1';
+int to_dec(const std::string& line) {
+    std::string bin;
+    for (char i : line)
+        bin += (i == 'F' || i  == 'L') ? '0' : '1';
 
-    return std::stoi(line, nullptr, 2);
+    return std::stoi(bin, nullptr, 2);
 }
 
 int main(int argc, char const *argv[]) {
@@ -18,9 +19,7 @@ int main(int argc, char const *argv[]) {
     std::transform(std::istream_iterator<std::string>(file),
                    std::istream_iterator<std::string>(),
                    std::back_inserter(indexes),
-                   [](std::string str) -> int {
-                       return to_dec(str);
-                   });
+                   &to_dec);
 
     std::sort(indexes.begin(), indexes.end());
     std::cout << indexes[indexes.size() - 1] << "\n";
@@ -31,6 +30,6 @@ int main(int argc, char const *argv[]) {
             break;
         }
     }
-    
+
     return 0;
 }
